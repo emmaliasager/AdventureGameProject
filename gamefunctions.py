@@ -2,41 +2,97 @@
 #Adventure Functions
 #10/06/24
 
-def purchase_item(itemPrice, startingMoney, quantityToPurchase=1):
-    """ This function takes the price of an item, the amount of money you start with, and the
-    quantity of items you want to purchase, and then returns how many items you are able
-    to purchase and the amount of money you have leftover after the purchase """
-    num_purchased = startingMoney // itemPrice
-    leftover_money = (startingMoney - (itemPrice * quantityToPurchase))
+"""
+gamefunctions.py
 
-    if leftover_money < 0:
-        leftover_money = 0
-        
-    return (num_purchased, leftover_money)
+This module contains various functions for a simple game, including functions to print a
+welcome message, display a shop menu, handle purchasing items, and generate random monsters.
 
-num_purchased, leftover_money = purchase_item(1.23, 10, 3)
-print("You are able to purchase:", num_purchased, "items.")
-print(f"You have ${leftover_money:.2f} leftover.")
-
-num_purchased, leftover_money = purchase_item(1.23, 2.01, 3)
-print("You are able to purchase:", num_purchased, "items.")
-print(f"You have ${leftover_money:.2f} leftover.")
-
-num_purchased, leftover_money = purchase_item(3.41, 21.12)
-print("You are able to purchase:", num_purchased, "items.")
-print("You have ${} leftover.".format(leftover_money))
-
-num_purchased, leftover_money = purchase_item(31.41, 21.12)
-print("You are able to purchase:", num_purchased, "items.")
-print("You have ${} leftover.".format(leftover_money))
-print(end='\n')
+Functions:
+    print_welcome(name, width=20): Prints a centered welcome message.
+    print_shop_menu(item1Name, item1Price, item2Name, item2Price): Displays a shop menu.
+    purchase_item(itemPrice, startingMoney, quantityToPurchase=1): Processes the purchase of an item.
+    new_random_monster(): Generates a random monster with randomized attributes.
+"""
 
 import random
 
+#documentation and strings – centered welcome message
+
+def print_welcome(name, width=20):
+    """
+    This function prints a centered welcome message with names.
+
+    Parameters:
+        name: Person's name
+        width: The width for centering the message (default is 20).
+
+    Returns none
+    """
+
+    print(f"{'Hello, ' + name + '!':^{width}}")
+
+print_welcome("Emmalia")
+print_welcome("Fritz")
+print_welcome("Moose")
+print(end='\n')
+
+
+#documentation and strings – shop menu
+
+def print_shop_menu(item1Name, item1Price, item2Name, item2Price):
+    """
+    This function displays a shop menu with item names and corresponding prices.
+
+    Parameters:
+        item1Name: The name of the first item.
+        item1Price: The price of the first item.
+        item2Name: The name of the second item.
+        item2Price: The price of the second item.
+
+    Returns none
+    """
+
+    print("/-----------------------\\")
+    print(f"| {item1Name:<12} ${item1Price:>7.2f} |")
+    print(f"| {item2Name:<12} ${item2Price:>7.2f} |")
+    print("\\-----------------------/")
+
+print_shop_menu("Apple", 31, "Pear", 1.234)
+print_shop_menu("Egg", 0.23, "Bag of Oats", 12.34)
+print_shop_menu("Orange", 2.5, "Banana", 0.75)
+print(end='\n')
+
+    
+def purchase_item(itemPrice, startingMoney, quantityToPurchase=1):
+    """ This function calculates how many items can be purchased and returns the quantity purchased and remaining money
+
+        Parameters:
+        itemPrice: The price of a single item
+        startingMoney: The amount of money available to spend
+        quantityToPurchase: The desired quantity to purchase. The default value is 1.
+
+        Returns a tuple containing the quantity purchased and the remaining money"""
+
+    totalCost = itemPrice * quantityToPurchase
+
+    if totalCost <= startingMoney:
+        quantityPurchased = quantityToPurchase
+        remainingMoney = startingMoney - totalCost
+    else:
+        quantityPurchased = int(startingMoney // itemPrice)
+        remainingMoney = startingMoney - (quantityPurchased * itemPrice)
+
+    return quantityPurchased, remainingMoney
+
+
 def new_random_monster():
-    """This function uses random to choose a monster from a dictionary list and outputs
-    the monster and all of its characteristics (where health, power, and money are
-    randomized each time"""
+    """
+    This function generates a random monster with randomized health, power, and money attributes.
+
+    Returns a dictionary representing the randomly generated monster.
+    """
+
     monsterTypes = [{"Name": "Goblin", "Description": "Playful little creature with floppy ears and a big nose who is always up to some goofy antics.",
                      "Health": [5, 10, 15], "Power": [3, 6, 9], "Money": [30, 35, 40]}, 
 
@@ -61,27 +117,24 @@ print("Power:", (monster["Power"]))
 print("Money:", (monster["Money"]))
 print(end='\n')
 
-#documentation and strings – centered welcome message
+def test_functions():
+    """
+    Tests the game functions by calling them with sample input and displaying results
 
-def print_welcome(name, width=20):
-    """This function will create a centered welcome message"""
-    print(f"{'Hello, ' + name + '!':^{width}}")
+    Returns none
+    """
 
-print_welcome("Emmalia")
-print_welcome("Fritz")
-print_welcome("Moose")
-print(end='\n')
+    print_welcome("Emmalia")
+    print_shop_menu("Apple", 31, "Pear", 1.234)
 
-#documentation and strings – shop menu
+    quantity, remaining_money = purchase_item(5, 20, 3)
+    print(f"Purchased: {quantity}, Remaining money: {remaining_money}")
 
-def print_shop_menu(item1Name, item1Price, item2Name, item2Price):
-    print("/-----------------------\\")
-    print(f"| {item1Name:<12} ${item1Price:>7.2f} |")
-    print(f"| {item2Name:<12} ${item2Price:>7.2f} |")
-    print("\\-----------------------/")
+    monster = new_random_monster()
+    print(f"Encountered: {monster['Name']}, Health: {monster['Health']}")
 
-print_shop_menu("Apple", 31, "Pear", 1.234)
-print_shop_menu("Egg", 0.23, "Bag of Oats", 12.34)
-print_shop_menu("Orange", 2.5, "Banana", 0.75)
-print(end='\n')
+if __name__ == "__main__":
+    test_functions()
+
+
 
