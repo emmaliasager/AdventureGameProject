@@ -32,11 +32,6 @@ def print_welcome(name, width=20):
 
     print(f"{'Hello, ' + name + '!':^{width}}")
 
-print_welcome("Emmalia")
-print_welcome("Fritz")
-print_welcome("Moose")
-print(end='\n')
-
 
 #documentation and strings – shop menu
 
@@ -58,10 +53,6 @@ def print_shop_menu(item1Name, item1Price, item2Name, item2Price):
     print(f"| {item2Name:<12} ${item2Price:>7.2f} |")
     print("\\-----------------------/")
 
-print_shop_menu("Apple", 31, "Pear", 1.234)
-print_shop_menu("Egg", 0.23, "Bag of Oats", 12.34)
-print_shop_menu("Orange", 2.5, "Banana", 0.75)
-print(end='\n')
 
     
 def purchase_item(itemPrice, startingMoney, quantityToPurchase=1):
@@ -109,32 +100,33 @@ def new_random_monster():
 
     return monster
 
-monster = new_random_monster()
-print(monster["Name"])
-print(monster["Description"])
-print("Health:", (monster["Health"]))
-print("Power:", (monster["Power"]))
-print("Money:", (monster["Money"]))
-print(end='\n')
 
-def test_functions():
-    """
-    Tests the game functions by calling them with sample input and displaying results
+def fight_monster(user_hp, monster):
+    print(f"A wild {monster['Name']} appears! Health: {monster['Health']}, Power: {monster['Power']}")
+    while True:
+        damage_to_monster = random.randint(5, 10)
+        damage_to_user = monster['Power']
 
-    Returns none
-    """
+        monster['Health'] -= damage_to_monster
+        user_hp -= damage_to_user
 
-    print_welcome("Emmalia")
-    print_shop_menu("Apple", 31, "Pear", 1.234)
+        print(f"You dealth {damage_to_monster} damage to {monster['Name']}!")
+        print(f"{monster['Name']} dealt {damage_to_user} to you!")
 
-    quantity, remaining_money = purchase_item(5, 20, 3)
-    print(f"Purchased: {quantity}, Remaining money: {remaining_money}")
+        if monster['Health'] <= 0:
+            print(f"You have defeated the {monster['Name']}!")
+            return user_hp
+        elif user_hp <= 0:
+            return user_hp
 
-    monster = new_random_monster()
-    print(f"Encountered: {monster['Name']}, Health: {monster['Health']}")
+        fight_choice = input("What would you like to do? (1) Continue fighting (2) Run away: ")
+        if fight_choice == '2':
+            print("You ran away!")
+            return user_hp
 
-if __name__ == "__main__":
-    test_functions()
-
-
+def sleep(current_hp):
+    restored_hp = 10
+    new_hp = min (current_hp + restored_hp, 30)
+    print(f"You slept and restored {restored_hp} HP!")
+    return new_hp
 

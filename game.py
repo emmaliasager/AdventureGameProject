@@ -22,13 +22,35 @@ def run_game():
     name = input("Enter your name: ")
     gamefunctions.print_welcome(name)
 
-    gamefunctions.print_shop_menu("Ramen", 2, "Fig bar", 5)
+    current_hp = 50
+    current_gold = 15
 
-    quantity, remaining_money = gamefunctions.purchase_item(50, 100, 2)
-    print(f"Quantity purchased: {quantity}, Money left: {remaining_money}")
+    while True:
+        #display current stats and options
+        print(f"\nCurrent HP: {current_hp}, Current Gold: {current_gold}")
+        print("What would you like to do?")
+        print("1) Fight Monster")
+        print("2) Sleep (Restore HP for 5 Gold)")
+        print("3) Quit")
 
-    monster = gamefunctions.new_random_monster()
-    print(f"A wild {monster['Name']} appears! Health: {monster['Health']}")
+        choice = input("Enter your choice (1-3): ")
+        if choice == '1':
+            monster = gamefunctions.new_random_monster()
+            current_hp = gamefunctions.fight_monster(current_hp, monster)
+            if current_hp <= 0:
+                print("You have been defeated!")
+                break
+        elif choice == '2':
+            if current_gold >= 5:
+                current_hp = gamefunctions.sleep(current_hp)
+                current_gold -= 5
+            else:
+                print("Not enough gold to sleep.")
+        elif choice == '3':
+            print("Thanks for playing!")
+        else:
+            print("Invalid choice, please try again.")
+
 
 if __name__ == "__main__":
     run_game()
