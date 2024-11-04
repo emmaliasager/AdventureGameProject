@@ -24,6 +24,7 @@ def run_game():
 
     current_hp = 50
     current_gold = 15
+    inventory = []
 
     while True:
         #display current stats and options
@@ -31,9 +32,11 @@ def run_game():
         print("What would you like to do?")
         print("1) Fight Monster")
         print("2) Sleep (Restore HP for 5 Gold)")
-        print("3) Quit")
+        print("3) Shop (Purchase Items)")
+        print("4) Equip Weapon")
+        print("5) Quit")
 
-        choice = input("Enter your choice (1-3): ")
+        choice = input("Enter your choice (1-5): ")
         if choice == '1':
             monster = gamefunctions.new_random_monster()
             current_hp = gamefunctions.fight_monster(current_hp, monster)
@@ -47,7 +50,14 @@ def run_game():
             else:
                 print("Not enough gold to sleep.")
         elif choice == '3':
+            item = gamefunctions.new_random_item()
+            gamefunctions.print_shop_menu([item])
+            current_gold, inventory = gamefunctions.purchase_item(item, item['price'], inventory, current_gold)
+        elif choice == '4':
+            equipped_weapon = gamefunctions.equip_item(inventory)
+        elif choice == '5':
             print("Thanks for playing!")
+            break
         else:
             print("Invalid choice, please try again.")
 

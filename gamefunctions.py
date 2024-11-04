@@ -19,6 +19,7 @@ import random
 
 #documentation and strings – centered welcome message
 
+
 def print_welcome(name, width=20):
     """
     This function prints a centered welcome message with names.
@@ -126,7 +127,52 @@ def fight_monster(user_hp, monster):
 
 def sleep(current_hp):
     restored_hp = 10
-    new_hp = min (current_hp + restored_hp, 30)
+    new_hp = min(current_hp + restored_hp, 30)
     print(f"You slept and restored {restored_hp} HP!")
     return new_hp
+
+def print_shop_menu(items):
+    """ Display the shop menu with items and their prices. """
+    print("/-----------------------\\")
+    for item in items:
+        print(f"| {item['name']:<12} ${item['price']:>7.2f} |")
+    print("\\-----------------------/")
+
+def purchase_item(item_name, item_price, inventory, current_gold):
+    """ Purchase an item and add it to the inventory. """
+    if current_gold >= item_price:
+        inventory.append(item_name)
+        return current_gold - item_price, inventory
+    else:
+        print("Not enough gold to purchase this item.")
+        return current_gold, inventory
+
+def equip_item(inventory):
+    """ Equip a weapon item from the inventory. """
+    weapons = [item for item in inventory if item['type'] == 'weapon']
+    if not weapons:
+        print("No weapons to equip.")
+        return None
+
+    print("Available weapons to equip: ")
+    for i, weapon in enumerate(weapons):
+        print(f"{i + 1}) {weapon['name']}!")
+
+    choice = int(input("Choose a weapon to equip (number): ")) - 1
+    if 0 <= choice < len(weapons):
+        equipped_weapon = weapons[choice]
+        print(f"You equipped the {equipped_weapon['name']}!")
+        return equipped_weapon
+    else:
+        print("Invalid choice.")
+        return None
+
+def new_random_item():
+    """ Generate a random item for the purchase. """
+    items = [
+        {"name": "Sword", "type": "weapon", "maxDurability": 10, "currentDurability": 10, "price": 20},
+        {"name": "Health Potion", "type": "consumable", "effect": "restore 20 HP", "price": 5},
+        {"name": "Shield", "type": "armor", "maxDurability": 15, "currentDurability": 15, "price": 25}
+    ]
+    return random.choice(items)
 
