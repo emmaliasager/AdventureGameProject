@@ -50,9 +50,12 @@ def print_shop_menu(item1Name, item1Price, item2Name, item2Price):
     """
 
     print("/-----------------------\\")
-    print(f"| {item1Name:<12} ${item1Price:>7.2f} |")
-    print(f"| {item2Name:<12} ${item2Price:>7.2f} |")
+    for item in items:
+        print(f"| {item['name']:<12} ${item['price']:>7.2f} |")
     print("\\-----------------------/")
+    #print(f"| {item1Name:<12} ${item1Price:>7.2f} |")
+    #print(f"| {item2Name:<12} ${item2Price:>7.2f} |")
+    #print("\\-----------------------/")
 
 
     
@@ -66,16 +69,24 @@ def purchase_item(itemPrice, startingMoney, quantityToPurchase=1):
 
         Returns a tuple containing the quantity purchased and the remaining money"""
 
-    totalCost = itemPrice * quantityToPurchase
-
-    if totalCost <= startingMoney:
-        quantityPurchased = quantityToPurchase
-        remainingMoney = startingMoney - totalCost
+    if current_gold >= item['price']:
+        inventory.append(item)
+        print(f"You have purchased {item['name']}!")
+        return current_gold - item['price'], inventory
     else:
-        quantityPurchased = int(startingMoney // itemPrice)
-        remainingMoney = startingMoney - (quantityPurchased * itemPrice)
+        print("Not enough gold to purchase this item.")
+        return current_gold, inventory
 
-    return quantityPurchased, remainingMoney
+    #totalCost = itemPrice * quantityToPurchase
+
+    #if totalCost <= startingMoney:
+       # quantityPurchased = quantityToPurchase
+      #  remainingMoney = startingMoney - totalCost
+    #else:
+      #  quantityPurchased = int(startingMoney // itemPrice)
+      #  remainingMoney = startingMoney - (quantityPurchased * itemPrice)
+
+    #return quantityPurchased, remainingMoney
 
 
 def new_random_monster():
@@ -104,6 +115,7 @@ def new_random_monster():
 
 def fight_monster(user_hp, monster):
     print(f"A wild {monster['Name']} appears! Health: {monster['Health']}, Power: {monster['Power']}")
+
     while True:
         damage_to_monster = random.randint(5, 10)
         damage_to_user = monster['Power']
@@ -127,7 +139,7 @@ def fight_monster(user_hp, monster):
 
 def sleep(current_hp):
     restored_hp = 10
-    new_hp = min(current_hp + restored_hp, 30)
+    new_hp = min(current_hp + restored_hp, 50)
     print(f"You slept and restored {restored_hp} HP!")
     return new_hp
 
@@ -156,7 +168,7 @@ def equip_item(inventory):
 
     print("Available weapons to equip: ")
     for i, weapon in enumerate(weapons):
-        print(f"{i + 1}) {weapon['name']}!")
+        print(f"{i + 1}) {weapon['name']} (Durability: {weapon['currentDurability']}/{weapon['maxDurability']})")
 
     choice = int(input("Choose a weapon to equip (number): ")) - 1
     if 0 <= choice < len(weapons):

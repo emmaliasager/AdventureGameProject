@@ -3,8 +3,7 @@
 #10/20/24
 
 """
-game.py   
-hello
+game.py
 
 This file imports the gamefunctions module and demonstrates usage of its functions.
 
@@ -53,7 +52,7 @@ def run_game():
         elif choice == '3':
             item = gamefunctions.new_random_item()
             gamefunctions.print_shop_menu([item])
-            current_gold, inventory = gamefunctions.purchase_item(item, item['price'], inventory, current_gold)
+            current_gold, inventory = gamefunctions.purchase_item(item['name'], item['price'], inventory, current_gold)
         elif choice == '4':
             equipped_weapon = gamefunctions.equip_item(inventory)
         elif choice == '5':
