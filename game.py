@@ -19,12 +19,26 @@ def run_game():
 
     Returns none
     """
-    name = input("Enter your name: ")
-    gamefunctions.print_welcome(name)
+    load_choice = input("Would you like to (1) Start a New Game or (2) Load a Previous Game?")
+    if load_choice == '2':
+        file_name = input("Enter the filename of the saved game: ")
+        game_data = gamefunctions.load_game(filename)
+        if game_data:
+            current_hp = game_data["hp"]
+            current_gold = game_data["gold"]
+            inventory = game_data["inventory"]
+        else:
+            print("Starting a new game.")
+            current_hp, current_gold, inventory = 50, 15, []
+    else:
+        current_hp, current_gold, inventory = 50, 15, []
+    
+    #name = input("Enter your name: ")
+    #gamefunctions.print_welcome(name)
 
-    current_hp = 50
-    current_gold = 15
-    inventory = []
+    #current_hp = 50
+    #current_gold = 15
+    #inventory = []
 
     while True:
         #display current stats and options
@@ -56,6 +70,8 @@ def run_game():
         elif choice == '4':
             equipped_weapon = gamefunctions.equip_item(inventory)
         elif choice == '5':
+            filename = input("Enter a filename to save the game: ")
+            gamefunctions.save_game(filename, current_hp, current_gold, inventory)
             print("Thanks for playing!")
             break
         else:
