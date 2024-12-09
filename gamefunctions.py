@@ -40,9 +40,15 @@ def equip_item(inventory):
         return None
 
 
-def fight_monster(user_hp, monster):
+def fight_monster(user_hp, monster, inventory):
     print(f"A wild {monster['Name']} appears! Health: {monster['Health']}, Power: {monster['Power']}")
 
+    special_item = next((item for item in inventory if item['type'] == 'special'), None)
+    if special_item:
+        print(f"You used the {special_item['name']} to defeat the monster without taking damage!")
+        inventory.remove(special_item)
+        return user_hp        
+    
     while True:
         damage_to_monster = random.randint(5, 10)
         damage_to_user = monster['Power']
@@ -57,12 +63,19 @@ def fight_monster(user_hp, monster):
             print(f"You have defeated the {monster['Name']}!")
             return user_hp
         elif user_hp <= 0:
+            print("You have been defeated!")
             return user_hp
 
         fight_choice = input("What would you like to do? (1) Continue fighting (2) Run away: ")
         if fight_choice == '2':
             print("You ran away!")
             return user_hp
+
+    if equipped_weapon and equipped_weapon['currentDurability'] <= 0:
+        print(f"Your {equipped_weapon['name']} broke!")
+        inventory.remove(equipped_weapon)
+
+    return user_hp
 
 def load_game(filename):
     """Load the game state from a JSON file."""
@@ -155,6 +168,7 @@ def purchase_item(item_name, item_price, inventory, current_gold):
     """ Purchase an item and add it to the inventory. """
     if current_gold >= item_price:
         inventory.append({"name": item_name, "type": "item_type", "maxDurability": 10, "currentDurability": 10})
+        print(f"You purchased {item_name}!")
         return current_gold - item_price, inventory
     else:
         print("Not enough gold to purchase this item.")
